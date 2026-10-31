@@ -1,0 +1,23 @@
+
+[
+  {
+    "username": "Demo User One",
+    "mobile_number": "0000000001",
+    "email": "demo1@example.com",
+    "user_id": "DEMO001",
+    "address": "Demo Address 1",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "pincode": "000000"
+  },
+  {
+    "username": "Demo User Two",
+    "mobile_number": "0000000002",
+    "email": "demo2@example.com",
+    "user_id": "DEMO002",
+    "address": "Demo Address 2",
+    "state": "Haryana",
+    "city": "Rohtak",
+    "pincode": "000000"
+  }
+]

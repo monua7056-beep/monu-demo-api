@@ -1,44 +1,34 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 
-app = FastAPI(
-    title="Monu Demo API",
-    description="Synthetic test data API",
-    version="1.0"
-)
+app = FastAPI(title="Monu Cyber Lab")
 
-demo_records = [
-    {
-        "username": "Demo User 1",
-        "mobile_number": "9999900001",
+demo_data = {
+    "0000000001": {
+        "username": "Demo User One",
+        "mobile_number": "0000000001",
         "email": "demo1@example.com",
         "user_id": "DEMO001",
-        "city": "Delhi",
-        "state": "Delhi"
+        "city": "Delhi"
     },
-    {
-        "username": "Demo User 2",
-        "mobile_number": "9999900002",
+    "0000000002": {
+        "username": "Demo User Two",
+        "mobile_number": "0000000002",
         "email": "demo2@example.com",
         "user_id": "DEMO002",
-        "city": "Rohtak",
-        "state": "Haryana"
+        "city": "Rohtak"
     }
-]
+}
 
-@app.get("/")
-def home():
-    return {"message": "Monu Demo API is running"}
+@app.get("/api/demo")
+def search_demo(number: str = Query(...)):
+    if not number.isdigit() or len(number) != 10:
+        return {"message": "Invalid demo number"}
 
-@app.get("/api/health")
-def health():
-    return {"status": "online"}
+    result = demo_data.get(number)
 
-@app.get("/api/demo/{user_id}")
-def get_demo(user_id: str):
-    for user in demo_records:
-        if user["user_id"] == user_id:
-            return user
+    if result:
+        return result
 
-    return {"error": "Demo record not found"}
-  
+    return {"message": "No demo record found"}
+    

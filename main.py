@@ -1,34 +1,40 @@
 
+import json
+from pathlib import Path
 from fastapi import FastAPI, Query
 
 app = FastAPI(title="Monu Cyber Lab")
 
-demo_data = {
-    "0000000001": {
-        "username": "Demo User One",
-        "mobile_number": "0000000001",
-        "email": "demo1@example.com",
-        "user_id": "DEMO001",
-        "city": "Delhi"
-    },
-    "0000000002": {
-        "username": "Demo User Two",
-        "mobile_number": "0000000002",
-        "email": "demo2@example.com",
-        "user_id": "DEMO002",
-        "city": "Rohtak"
-    }
-}
+DB_FILE = Path(__file__).parent / "demo_data.json"
 
-@app.get("/api/demo")
-def search_demo(number: str = Query(...)):
+def load_database():
+    with open(DB_FILE, "r", encoding="utf-8") as file:
+        return json.load(file)
+
+@app.get("/")
+def home():
+    return {
+        "project": "Monu Cyber Lab",
+        "owner": "Monu Chaudhary",
+        "status": "online"
+    }
+
+@app.get("/api/search")
+def search_number(number: str = Query(...)):
     if not number.isdigit() or len(number) != 10:
         return {"message": "Invalid demo number"}
 
-    result = demo_data.get(number)
+    records = load_database()
 
-    if result:
-        return result
+    for record in records:
+        if record.get("mobile_number") == number:
+            return {
+                "status": "found",
+                "data": record
+            }
 
-    return {"message": "No demo record found"}
+    return {
+        "status": "not_found",
+        "message": "No demo record found"
+    }
     
